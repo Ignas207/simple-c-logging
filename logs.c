@@ -1,7 +1,5 @@
 #include "logs.h"
 
-static char logStr[LOGS_MAX_LENGHT] = {0};
-
 static void WriteLogFile(const char* msg, uint32_t len);
 
 
@@ -12,8 +10,8 @@ void LogWrite(const char *type,
 {
     uint32_t retSize;
     va_list argp;
+    char logStr[LOGS_MAX_LENGHT] = {0};
 
-    memset(logStr, 0, LOGS_MAX_LENGHT);
     // Writing the starting portion
     retSize = snprintf(logStr, LOGS_MAX_LENGHT, "%s (%s:%d): ", type, fileName, lineNumber);
 
