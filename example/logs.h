@@ -34,6 +34,24 @@ extern "C" {
  */
 #define FILENAME__ (__FILE__ + SOURCE_PATH_SIZE)
 
+#define __LOG_WRITE(type, fileName, lineNumber, fmt, ...)                      \
+  do {                                                                         \
+                                                                               \
+    int32_t retSize;                                                           \
+    va_list argp;                                                              \
+    char logStr[LOGS_MAX_LENGHT] = {0};                                        \
+                                                                               \
+    /* Writing the starting portion */                                         \
+    retSize = snprintf(logStr, LOGS_MAX_LENGHT, "%s (%s:%d): ", type,          \
+                       fileName, lineNumber);                                  \
+                                                                               \
+    /* Writing the VA_ARGS */                                                  \
+    va_start(argp, fmt);                                                       \
+    vsnprintf(logStr + retSize, LOGS_MAX_LENGHT - retSize, fmt, argp);         \
+    va_end(argp);                                                              \
+                                                                               \
+  } while (0)
+
 #ifdef LOG_ENABLE_EVENT_MSG
 /**
  * @brief Writes an 'Event' message to the terminal.
@@ -68,7 +86,7 @@ extern "C" {
  *
  */
 #define LOG_ERROR(fmt, ...)                                                    \
-  ((LogWrite("ERROR", FILENAME__, __LINE__, fmt, ##__VA_ARGS__)))
+  ((__LOG_WRITE("ERROR", FILENAME__, __LINE__, fmt, ##__VA_ARGS__)))
 #else
 #define LOG_ERROR(fmt, ...)                                                    \
   do {                                                                         \
