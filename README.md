@@ -6,6 +6,10 @@
 
 - Adjust `LOGS_MAX_LENGHT` in `logs.h` to your desired size.
 - Only `WriteLogFile(const char* msg, uint32_t len)` needs to be implemented!
+- Toggleble `Info`, `Event` and `Error` log messages with compile definitions:
+  - `LOG_ENABLE_INFO_MSG`
+  - `LOG_ENABLE_EVENT_MSG`
+  - `LOG_ENABLE_ERROR_MSG`
 
 - The following functions:
 
@@ -22,6 +26,8 @@ ERROR (Core/Src/main.c:123): This is an error!
 EVENT (Core/Src/main.c:124): This is an event!
 ```
 
+See an example in `example/main.c`
+
 ## Getting the relative path
 
 - If you are using CMake, then add the following to your `CMakeLists`:
@@ -30,4 +36,4 @@ string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
 add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
 ```
 
-- Otherwise, you can set this manualy.
+- Otherwise, you can set this manually.
