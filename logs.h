@@ -5,7 +5,9 @@
 extern "C" {
 #endif
 
+#ifdef __clang__
 #pragma clang diagnostic ignored "-Wstring-plus-int"
+#endif
 
 #include <stdarg.h>
 #include <stdint.h>
@@ -32,7 +34,7 @@ extern "C" {
  * @brief We are using this to get rid of the absolute path of our project.
  *
  */
-#define FILENAME__ (__FILE__ + SOURCE_PATH_SIZE)
+#define FILENAME__ ((__FILE__) + SOURCE_PATH_SIZE)
 
 #ifdef LOG_ENABLE_EVENT_MSG
 /**
