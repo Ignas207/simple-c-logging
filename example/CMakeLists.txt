@@ -13,5 +13,4 @@ add_definitions("-DLOG_ENABLE_ERROR_MSG")
 
 add_executable(${CMAKE_PROJECT_NAME}
     ${CMAKE_SOURCE_DIR}/main.c
-    ${CMAKE_SOURCE_DIR}/logs.c
 )

@@ -2,10 +2,12 @@
 
 - Simple C logging!
 
+*Header only implementation!*
+
 ## Usage
 
 - Adjust `LOGS_MAX_LENGHT` in `logs.h` to your desired size.
-- Only `WriteLogFile(const char* msg, uint32_t len)` needs to be implemented!
+- ~~Only `WriteLogFile(const char* msg, uint32_t len)` needs to be implemented!~~
 - Toggleble `Info`, `Event` and `Error` log messages with compile definitions:
   - `LOG_ENABLE_INFO_MSG`
   - `LOG_ENABLE_EVENT_MSG`

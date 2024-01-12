@@ -1,3 +1,14 @@
+/**
+ * @file logs.h
+ * @author Ignas207 (https://github.com/Ignas207/simple-c-logging)
+ * @brief Header only implementation of logging functions.
+ * @version 1.0
+ * @date 2024-01-12
+ * 
+ * @copyright Copyright (c) 2024 MIT License
+ * 
+ */
+
 #ifndef LOGGING_H
 #define LOGGING_H
 
@@ -5,7 +16,9 @@
 extern "C" {
 #endif
 
+#ifdef __clang__
 #pragma clang diagnostic ignored "-Wstring-plus-int"
+#endif
 
 #include <stdarg.h>
 #include <stdint.h>
@@ -13,7 +26,7 @@ extern "C" {
 #include <string.h>
 
 
-#define LOGS_MAX_LENGHT 512U
+#define LOGS_MAX_LENGHT 150U
 
 /*
     Gets the path RELATIVE to CMakeLists!
@@ -32,7 +45,22 @@ extern "C" {
  * @brief We are using this to get rid of the absolute path of our project.
  *
  */
-#define FILENAME__ (__FILE__ + SOURCE_PATH_SIZE)
+#define FILENAME__ ((__FILE__) + SOURCE_PATH_SIZE)
+
+#define __LOG_WRITE(type, fileName, lineNumber, fmt, ...)                         \
+  do {                                                                            \
+                                                                                  \
+    int32_t retSize;                                                              \
+    char logStr[LOGS_MAX_LENGHT] = {0};                                           \
+                                                                                  \
+    /* Writing the starting portion */                                            \
+    retSize = snprintf(logStr, LOGS_MAX_LENGHT, "%s (%s:%d): ", type,             \
+                       fileName, lineNumber);                                     \
+                                                                                  \
+    /* Writing the VA_ARGS */                                                     \
+    snprintf(logStr + retSize, LOGS_MAX_LENGHT - retSize -1, fmt, ##__VA_ARGS__); \
+    puts(logStr);                                                                 \
+  } while (0)
 
 #ifdef LOG_ENABLE_EVENT_MSG
 /**
@@ -40,7 +68,7 @@ extern "C" {
  *
  */
 #define LOG_EVENT(fmt, ...)                                                    \
-  ((LogWrite("EVENT", FILENAME__, __LINE__, fmt, ##__VA_ARGS__)))
+  __LOG_WRITE("EVENT", FILENAME__, __LINE__, fmt, ##__VA_ARGS__)
 #else
 #define LOG_EVENT(fmt, ...)                                                    \
   do {                                                                         \
@@ -54,7 +82,7 @@ extern "C" {
  *
  */
 #define LOG_INFO(fmt, ...)                                                     \
-  ((LogWrite("INFO", FILENAME__, __LINE__, fmt, ##__VA_ARGS__)))
+  __LOG_WRITE("INFO", FILENAME__, __LINE__, fmt, ##__VA_ARGS__)               
 #else
 #define LOG_INFO(fmt, ...)                                                     \
   do {                                                                         \
@@ -68,26 +96,13 @@ extern "C" {
  *
  */
 #define LOG_ERROR(fmt, ...)                                                    \
-  ((LogWrite("ERROR", FILENAME__, __LINE__, fmt, ##__VA_ARGS__)))
+  __LOG_WRITE("ERROR", FILENAME__, __LINE__, fmt, ##__VA_ARGS__)
 #else
 #define LOG_ERROR(fmt, ...)                                                    \
   do {                                                                         \
     (void)fmt;                                                                 \
   } while (0)
 #endif
-
-/**
- * @brief Log writing function
- * @warning do not use on its own!
- *
- * @param type log type
- * @param fileName name of the .c file
- * @param lineNumber line in the .c file
- * @param fmt
- * @param ...
- */
-void LogWrite(const char *type, const char *fileName, const uint16_t lineNumber,
-              const char *fmt, ...);
 
 #ifdef __cplusplus
 }
